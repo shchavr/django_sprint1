@@ -47,6 +47,7 @@ contex = {
     'posts': posts
 }
 
+
 # Create your views here.
 def index(request):
     return render(request, 'blog/index.html', context=contex)
@@ -61,4 +62,4 @@ def category_posts(request, category_slug):
     contex = {
         'cat': category_slug
     }
-    return render(request, 'blog/category.html', context=contex) 
+    return render(request, 'blog/category.html', context=contex)
