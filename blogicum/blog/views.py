@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import Http404
+
 
 posts = [
     {
@@ -43,23 +45,24 @@ posts = [
     },
 ]
 
-contex = {
-    'posts': posts
-}
+main_posts = {post['id']: post for post in posts}
 
 
-# Create your views here.
 def index(request):
-    return render(request, 'blog/index.html', context=contex)
+    template_name = 'blog/index.html'
+    context = {'posts': posts[::-1]}
+    return render(request, template_name, context)
 
 
-def post_detail(request, id):
-    con = posts[id]
-    return render(request, 'blog/detail.html', context=con)
+def post_detail(request, post_id):
+    template_name = 'blog/detail.html'
+    if post_id not in main_posts:
+        raise Http404('Страница не найдена!')
+    context = {'post': main_posts[post_id]}
+    return render(request, template_name, context)
 
 
 def category_posts(request, category_slug):
-    contex = {
-        'cat': category_slug
-    }
-    return render(request, 'blog/category.html', context=contex)
+    template_name = 'blog/category.html'
+    context = {'category': category_slug}
+    return render(request, template_name, context)
